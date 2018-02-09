@@ -1,6 +1,6 @@
-#include <iostream>
-#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
 
 int main() {
-    std::cout << "Here's a civil_day_d: " << cctz::civil_day d(2016, 2, 1);
+	cctz::time_zone lax;
+	load_time_zone("America/Los_Angeles", &lax);
 }
