@@ -7,8 +7,7 @@ import os
 
 class CCTZConan(ConanFile):
     name = "cctz"
-    version = "20180206"
-    commit_id = "e19879df3a14791b7d483c359c4acd6b2a1cd96b"
+    version = "2.2"
     url = "https://github.com/bincrafters/conan-cctz"
     description = "C++ library for translating between absolute and civil times"
     license = "Apache 2.0"
@@ -34,7 +33,7 @@ class CCTZConan(ConanFile):
 
     def requirements(self):
         if self.options.build_testing:
-            self.requires("gtest/1.8.0@bincrafters/stable")
+            self.requires("gtest/1.8.0@conan/stable")
 
     def configure(self):
         if self.settings.os == "Windows":
@@ -42,8 +41,8 @@ class CCTZConan(ConanFile):
             
     def source(self):
         source_url = "https://github.com/google/cctz"
-        tools.get("{0}/archive/{1}.zip".format(source_url, self.commit_id))
-        extracted_dir = "cctz-" + self.commit_id
+        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
+        extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
 
 
