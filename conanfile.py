@@ -19,25 +19,18 @@ class CCTZConan(ConanFile):
     options = {
         "shared": [True, False], 
         "build_testing" : [True, False], 
-        "build_examples" : [True, False], 
-        "fpic": [True, False]
+        "build_examples" : [True, False]
     }
     
     default_options = (
         "shared=False", 
         "build_testing=False", 
-        "fpic=False",
         "build_examples=False"
     )
     
-
     def requirements(self):
         if self.options.build_testing:
             self.requires("gtest/1.8.0@conan/stable")
-
-    def configure(self):
-        if self.settings.os == "Windows":
-            self.options.remove("fPIC")
             
     def source(self):
         source_url = "https://github.com/google/cctz"
@@ -50,14 +43,12 @@ class CCTZConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions["BUILD_EXAMPLES"] = self.options.build_examples
         cmake.definitions["BUILD_TESTING"] = self.options.build_testing
-        if self.settings.os != "Windows":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
         cmake.configure()
         cmake.build()
 
     def package(self):
         include_folder = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="LICENSE.txt", dst="license", src=self.source_subfolder)
+        self.copy(pattern="LICENSE.txt", dst="licenses", src=self.source_subfolder)
         self.copy(pattern="*", dst="include", src=include_folder)
         self.copy(pattern="*.dll", dst="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", keep_path=False)
