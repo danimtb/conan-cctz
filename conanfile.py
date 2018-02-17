@@ -41,6 +41,7 @@ class CCTZConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions["CMAKE_CXX_STANDARD"] = "11"
         cmake.definitions["BUILD_EXAMPLES"] = self.options.build_examples
         cmake.definitions["BUILD_TESTING"] = self.options.build_testing
         cmake.configure()
