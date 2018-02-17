@@ -17,13 +17,15 @@ class CCTZConan(ConanFile):
     source_subfolder = "source_subfolder"
     settings = "os", "arch", "compiler", "build_type"
     options = {
-        "shared": [True, False], 
-        "build_testing" : [True, False], 
+        "shared": [True, False],
+        "build_tools" : [True, False],
+        "build_testing" : [True, False],
         "build_examples" : [True, False]
     }
-    
+
     default_options = (
         "shared=False", 
+        "build_tools=False",
         "build_testing=False", 
         "build_examples=False"
     )
@@ -38,9 +40,15 @@ class CCTZConan(ConanFile):
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
 
+        # this is a specific patch to the CMakeLists.txt which MUST be remove iff ( cctz version > 2.2 )
+        _cmakelists_new = "https://raw.githubusercontent.com/google/cctz/8768b6d02283f6226527c1a7fb39c382ddfb4cec/CMakeLists.txt"
+        _cmakelists_old = os.path.join(self.source_subfolder, "CMakeLists.txt")
+        tools.download(_cmakelists_new, _cmakelists_old, overwrite=True)
+
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions["BUILD_TOOLS"] = self.options.build_tools
         cmake.definitions["BUILD_EXAMPLES"] = self.options.build_examples
         cmake.definitions["BUILD_TESTING"] = self.options.build_testing
         cmake.configure()
@@ -59,5 +67,7 @@ class CCTZConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+
         if self.settings.os == "Linux":
-            self.cpp_info.libs.append("pthread")
+            self.cpp_info.cppflags=["-std=c++11"]
+            #self.cpp_info.libs.append("pthread")
