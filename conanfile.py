@@ -48,9 +48,12 @@ class CCTZConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+        cmake.verbose = True
         cmake.definitions["BUILD_TOOLS"] = self.options.build_tools
         cmake.definitions["BUILD_EXAMPLES"] = self.options.build_examples
         cmake.definitions["BUILD_TESTING"] = self.options.build_testing
+        if self.settings.compiler == "Visual Studio":
+            cmake.definitions["CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS"] = self.options.shared
         cmake.configure()
         cmake.build()
 
