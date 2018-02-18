@@ -29,7 +29,7 @@ class CCTZConan(ConanFile):
         "build_testing=False", 
         "build_examples=False"
     )
-    
+
     def requirements(self):
         if self.options.build_testing:
             self.requires("gtest/1.8.0@conan/stable")
@@ -37,7 +37,7 @@ class CCTZConan(ConanFile):
     def configure(self):
         if self.settings.compiler in [ "gcc", "clang" ]:
             self.settings.compiler.libcxx = 'libstdc++11'
-            
+
     def source(self):
         source_url = "https://github.com/google/cctz"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
@@ -74,6 +74,7 @@ class CCTZConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-           
+
         if self.settings.compiler in [ "gcc", "clang" ]:
             self.cpp_info.cppflags = ["-std=c++11"]
+
