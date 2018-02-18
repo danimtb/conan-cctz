@@ -9,6 +9,10 @@ class TestPackageConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
 
+    def configure(self):
+        if self.settings.compiler in [ "gcc", "clang" ]:
+            self.settings.compiler.libcxx = 'libstdc++11'
+
     def build(self):
         cmake = CMake(self)
         cmake.verbose = True
