@@ -33,6 +33,10 @@ class CCTZConan(ConanFile):
     def requirements(self):
         if self.options.build_testing:
             self.requires("gtest/1.8.0@conan/stable")
+
+    def configure(self):
+        if self.settings.compiler in [ "gcc", "clang" ]:
+            self.settings.compiler.libcxx = 'libstdc++11'
             
     def source(self):
         source_url = "https://github.com/google/cctz"
@@ -70,7 +74,6 @@ class CCTZConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-
-        if self.settings.os == "Linux":
-            self.cpp_info.cppflags=["-std=c++11"]
-            #self.cpp_info.libs.append("pthread")
+           
+        if self.settings.compiler in [ "gcc", "clang" ]:
+            self.cpp_info.cppflags = ["-std=c++11"]
