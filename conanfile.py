@@ -36,7 +36,7 @@ class CCTZConan(ConanFile):
             self.requires("gtest/1.8.0@conan/stable")
 
     def configure(self):
-        if self.settings.compiler in [ "gcc", "clang" ] and self.settings.compiler.libcxx != 'libstdc++11'
+        if self.settings.compiler in [ "gcc", "clang" ] and self.settings.compiler.libcxx != 'libstdc++11':
             raise ConanException('cctz requires libstdc++11, but was passed:' + str(self.settings.compiler.libcxx))
 
     def source(self):
