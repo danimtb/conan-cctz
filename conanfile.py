@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from conans import ConanFile, CMake, tools
+from conans.errors import ConanException
 import os
 
 
@@ -35,8 +36,8 @@ class CCTZConan(ConanFile):
             self.requires("gtest/1.8.0@conan/stable")
 
     def configure(self):
-        if self.settings.compiler in [ "gcc", "clang" ]:
-            self.settings.compiler.libcxx = 'libstdc++11'
+        if self.settings.compiler in [ "gcc", "clang" ] and self.settings.compiler.libcxx != 'libstdc++11'
+            raise ConanException('cctz requires libstdc++11, but was passed:' + self.settings.compiler.libcxx)
 
     def source(self):
         source_url = "https://github.com/google/cctz"
