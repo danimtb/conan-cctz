@@ -16,6 +16,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+#include <cstdlib>
 #include <iostream>
 #include <string>
 
@@ -34,5 +35,7 @@ int main() {
 
   std::cout << cctz::format("Talk starts at %H:%M:%S %z (%Z)\n", tp, lax);
   std::cout << cctz::format("Talk starts at %H:%M:%S %z (%Z)\n", tp, nyc);
+
+  return EXIT_SUCCESS;
 }
 
