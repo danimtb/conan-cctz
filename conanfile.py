@@ -25,8 +25,8 @@ class CCTZConan(ConanFile):
     default_options = {
         "fPIC": True,
         "shared": False, 
-        "build_tools", False
-    )
+        "build_tools": False
+    }
     _source_subfolder = "source_subfolder"
 
     def config_options(self):
@@ -40,7 +40,7 @@ class CCTZConan(ConanFile):
 
         # this is a specific patch to the CMakeLists.txt which MUST be remove iff ( cctz version > 2.2 )
         _cmakelists_new = "https://raw.githubusercontent.com/google/cctz/8768b6d02283f6226527c1a7fb39c382ddfb4cec/CMakeLists.txt"
-        _cmakelists_old = os.path.join(self.source_subfolder, "CMakeLists.txt")
+        _cmakelists_old = os.path.join(self._source_subfolder, "CMakeLists.txt")
         tools.download(_cmakelists_new, _cmakelists_old, overwrite=True)
 
     def build(self):
@@ -52,8 +52,8 @@ class CCTZConan(ConanFile):
         cmake.build()
 
     def package(self):
-        include_folder = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="LICENSE.txt", dst="licenses", src=self.source_subfolder)
+        include_folder = os.path.join(self._source_subfolder, "include")
+        self.copy(pattern="LICENSE.txt", dst="licenses", src=self._source_subfolder)
         self.copy(pattern="*", dst="include", src=include_folder)
         self.copy(pattern="*.dll", dst="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", keep_path=False)
